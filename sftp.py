@@ -47,13 +47,13 @@ class FTPClient:
 
         if len(words) == 1:
             return ['quit', 'ls', 'cd', 'get', 'download']
-        elif len(words) == 2:
+
+        if len(words) == 2:
             if words[0] == 'cd':
                 return [f'"{entry.filename}"' if ' ' in entry.filename else entry.filename for entry in self._client.listdir_attr() if stat.S_ISDIR(entry.st_mode or 0)]
-            elif words[0] in ('get', 'download'):
+
+            if words[0] in ('get', 'download'):
                 return [f'"{entry.filename}"' if ' ' in entry.filename else entry.filename for entry in self._client.listdir_attr() if stat.S_ISREG(entry.st_mode or 0)]
-            
-            return []
 
         return []
 
@@ -70,7 +70,7 @@ class FTPClient:
                 elif cmd == 'ls':
                     self.ls()
                 elif cmd == 'cd':
-                    if len(cmd) > 1:
+                    if len(args) > 1:
                         self.cd(to=args[0])
                 elif cmd in ('get', 'download'):
                     if not 1 <= len(args) <= 2:
@@ -80,8 +80,7 @@ class FTPClient:
                     if len(args) == 2:
                         fname, save_path = args
                     else:
-                        fname = args[0]
-                        save_path = f'./{fname}'
+                        fname, save_path = args[0], f'./{fname}'
 
                     self.download_file(fname, save_path)
                 else:
