@@ -70,8 +70,9 @@ class FTPClient:
                 elif cmd == 'ls':
                     self.ls()
                 elif cmd == 'cd':
-                    if len(args) > 1:
-                        self.cd(to=args[0])
+                    if len(args) > 0:
+                        path = '/'.join([self._pwd, args[0]])
+                        self._execute_safely(lambda: self._client.chdir(path))
                 elif cmd in ('get', 'download'):
                     if not 1 <= len(args) <= 2:
                         print('invalid command format, use "get <file> [save_location]"')
@@ -90,10 +91,6 @@ class FTPClient:
                 break
 
         self._client.close()
-
-    def cd(self, to: str):
-        path = '/'.join([self._pwd, to])
-        self._execute_safely(lambda: self._client.chdir(path))
 
     def ls(self):
         for entry in sorted(self._client.listdir_attr(), key=self._ls_sort):
@@ -171,7 +168,7 @@ class FTPClient:
             raise ValueError(f'Unterminated quote at index {index}')
 
         if escaping:
-            raise ValueError(f'Escape sequence is not proceeded by a character at index {index}')
+            raise ValueError(f'Escape sequence is not followed by a character at index {index}')
 
         if arg:
             parsed.append(arg)
