@@ -4,7 +4,7 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from paramiko import AutoAddPolicy, SSHClient
 from prompt_toolkit import prompt
-from prompt_toolkit.completion import Completer, WordCompleter
+from prompt_toolkit.completion import Completer
 from prompt_toolkit.completion.base import CompleteEvent, Completion
 from prompt_toolkit.document import Document
 from rich.progress import (BarColumn, DownloadColumn, Progress, TextColumn,
