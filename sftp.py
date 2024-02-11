@@ -46,7 +46,7 @@ class FTPClient:
         words = document.current_line.split(' ')
 
         if len(words) == 1:
-            return ['quit', 'ls', 'cd', 'get', 'download']
+            return ['quit', 'ls', 'cd', 'get', 'download', 'mkdir']
 
         if len(words) == 2:
             if words[0] == 'cd':
@@ -84,6 +84,13 @@ class FTPClient:
                         fname, save_path = args[0], f'./{fname}'
 
                     self.download_file(fname, save_path)
+                elif cmd == 'mkdir':
+                    if len(args) == 0:
+                        print('no folder names specified')
+                        continue
+
+                    for folder_name in args:
+                        self._client.mkdir(folder_name)
                 else:
                     print('Unknown command')
             except KeyboardInterrupt:
